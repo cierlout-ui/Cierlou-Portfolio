@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Projects — Cierlou Tudtud</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="allaccent.css">
+<link rel="stylesheet" href="pop-up-overlay.css">
+<style>
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--navy);color:var(--light);font-family:'DM Sans',sans-serif;font-size:16px;overflow-x:hidden;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(13,27,42,0.88);backdrop-filter:blur(14px);border-bottom:1px solid rgba(232,197,71,0.12);}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.12em;color:var(--accent);text-decoration:none;}
+  .nav-logo span{color:var(--white);}
+  .nav-links{display:flex;gap:2.2rem;list-style:none;}
+  .nav-links a{text-decoration:none;color:var(--muted);font-family:'Syne',sans-serif;font-size:0.82rem;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;transition:color 0.2s;position:relative;}
+  .nav-links a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:var(--accent);transition:width 0.3s;}
+  .nav-links a:hover{color:var(--accent);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-links a.active{color:var(--accent);}
+  .nav-links a.active::after{width:100%;}
+
+  .page-header{padding:10rem 4rem 5rem;background:var(--navy2);border-bottom:1px solid #2A97FD;position:relative;overflow:hidden;}
+  .page-header::before{content:'';position:absolute;right:-2rem;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:20vw;color:rgba(232,197,71,0.03);line-height:1;pointer-events:none;white-space:nowrap;}
+  .page-header-inner{position:relative;z-index:1;}
+  .section-label{font-family:'Syne',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,6rem);line-height:0.95;letter-spacing:0.02em;}
+  .page-title .accent{color:var(--accent);}
+
+  /* FILTER TABS */
+  .filter-bar{
+    padding:2.5rem 4rem 0;
+    display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;
+  }
+  .filter-btn{
+    font-family:'Syne',sans-serif;font-size:0.78rem;font-weight:700;
+    letter-spacing:0.12em;text-transform:uppercase;
+    padding:0.5rem 1.2rem;border-radius:4px;
+    border:1.5px solid #2A97FD;
+    background:transparent;color:var(--muted);
+    cursor:pointer;transition:all 0.2s;
+  }
+  .filter-btn:hover,.filter-btn.active{
+    background:#1a3352;border-color:var(--accent);color:var(--accent);
+  }
+
+  /* PROJECTS GRID */
+  .projects-grid{
+    padding:3rem 4rem 6rem;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;
+  }
+
+  .project-card{
+    background:var(--navy2);
+    border:1px solid #2A97FD;
+    border-radius:8px;
+    overflow:hidden;
+    transition:all 0.35s;
+    display:flex;flex-direction:column;
+  }
+  .project-card:hover{border-color:#1a3352;transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.4);}
+
+  /* Featured card spans 2 cols */
+  .project-card.featured{grid-column:span 2;}
+
+  .project-thumb{
+    height:220px;
+    position:relative;overflow:hidden;
+    background:linear-gradient(145deg,var(--navy3),var(--navy));
+    display:flex;align-items:center;justify-content:center;
+  }
+  .project-card.featured .project-thumb{height:500px;}
+  .thumb-icon{font-size:3.5rem;opacity:0.3;transition:all 0.3s;}
+  .project-card:hover .thumb-icon{opacity:0.5;transform:scale(1.1);}
+  .thumb-label{
+    position:absolute;bottom:0;left:0;right:0;
+    background:linear-gradient(transparent,rgba(13,27,42,0.9));
+    padding:2rem 1.5rem 1rem;
+  }
+  .project-year{font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;color:var(--accent);letter-spacing:0.15em;text-transform:uppercase;}
+
+  /* Colored thumb overlays */
+  .thumb-wp{background:linear-gradient(145deg,#1e3a5f,#0d2237);}
+  .thumb-wc{background:linear-gradient(145deg,#1a3326,#0d2218);}
+  .thumb-re{background:linear-gradient(145deg,#2a1a3e,#1a0d28);}
+  .thumb-shop{background:linear-gradient(145deg,#3a2a1a,#2a1a0d);}
+  .thumb-seo{background:linear-gradient(145deg,#1a2a3a,#0d1a28);}
+  .thumb-va{background:linear-gradient(145deg,#2a1a2a,#1a0d1a);}
+
+  .project-body{padding:1.5rem;flex:1;display:flex;flex-direction:column;}
+  .project-tags{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.8rem;}
+  .project-tag{font-family:'Syne',sans-serif;font-size:0.68rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;background:#1a3352;border:1px solid #2A97FD;color:var(--accent);padding:0.2rem 0.6rem;border-radius:3px;}
+  .project-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.05rem;margin-bottom:0.5rem;line-height:1.3;}
+  .project-client{font-size:0.78rem;color:var(--accent);margin-bottom:0.8rem;font-weight:500;}
+  .project-desc{font-size:0.85rem;color:var(--muted);line-height:1.7;flex:1;}
+  .project-footer{
+    margin-top:1.2rem;padding-top:1rem;
+    border-top:1px solid rgba(232,197,71,0.08);
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .project-result{font-size:0.75rem;color:var(--muted);}
+  .project-result strong{color:var(--accent);}
+  .project-link{
+    font-family:'Syne',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--accent);text-decoration:none;
+    display:flex;align-items:center;gap:0.3rem;transition:gap 0.2s;
+  }
+  .project-link:hover{gap:0.6rem;}
+
+  /* FEATURED project extra highlight */
+  .project-card.featured .project-name{font-size:1.3rem;}
+
+  /* STATS BAND */
+  .stats-band{
+    padding:4rem;
+    background:var(--navy2);
+    border-top:1px solid rgba(232,197,71,0.08);
+    border-bottom:1px solid rgba(232,197,71,0.08);
+    display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;
+    text-align:center;
+  }
+  .stat-item{border-left:2px solid #2A97FD;padding:0 2rem;}
+  .stat-item:first-child{border-left:none;}
+  .stat-num{font-family:'Bebas Neue',sans-serif;font-size:3rem;color:var(--accent);line-height:1;}
+  .stat-label{font-size:0.78rem;color:var(--muted);font-family:'Syne',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin-top:0.4rem;}
+
+  /* PROCESS SECTION */
+  .process-section{padding:5rem 4rem;}
+  .process-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3.2rem);line-height:1;margin-bottom:3rem;}
+  .process-title .accent{color:var(--accent);}
+  .process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;}
+  .process-step{position:relative;}
+  .step-num{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:#1a3352;line-height:1;margin-bottom:-1rem;}
+  .step-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.5rem;}
+  .step-desc{font-size:0.85rem;color:var(--muted);line-height:1.65;}
+  .process-step::after{content:'→';position:absolute;right:-1rem;top:1.5rem;color:var(--accent);opacity:0.3;font-size:1.2rem;}
+  .process-step:last-child::after{display:none;}
+
+  .cta-banner {
+    padding: 5rem 4rem;
+    display:flex; align-items:center; justify-content:space-between; gap:3rem;
+    background: linear-gradient(135deg, #0B2A46 0%, #0B2A46 100%);
+    border-top:1px solid #082138;
+    border-bottom:1px solid #082138;
+  }
+  .cta-text h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3rem);line-height:1;}
+  .cta-text p{color:var(--muted);margin-top:0.8rem;max-width:500px;line-height:1.7;}
+
+  footer{padding:3rem 4rem;display:flex;align-items:center;justify-content:space-between;background:var(--navy);border-top:1px solid rgba(232,197,71,0.08);}
+  .footer-logo{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--accent);letter-spacing:0.1em;}
+  .footer-logo span{color:var(--white);}
+  .footer-copy{font-size:0.78rem;color:var(--muted);}
+  .footer-links{display:flex;gap:1.5rem;}
+  .footer-links a{font-size:0.78rem;color:var(--muted);text-decoration:none;transition:color 0.2s;font-family:'Syne',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;}
+  .footer-links a:hover{color:var(--accent);}
+
+  .btn-primary {
+    display: inline-flex; align-items:center; gap:0.5rem;
+    background: var(--gradient);
+    color: var(--navy);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px #1D69B1;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px #1D69B1; }
+  .btn-outline {
+    display: inline-flex; align-items:center; gap:0.5rem;
+    border: 1.5px solid #1D69B1;
+    color: var(--light);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-2px);}
+
+  .hidden{display:none!important;}
+
+  @media(max-width:900px){
+    nav{padding:1rem 2rem;}
+    .page-header{padding:8rem 2rem 3rem;}
+    .filter-bar{padding:2rem 2rem 0;}
+    .projects-grid{grid-template-columns:1fr;padding:2rem;}
+    .project-card.featured{grid-column:span 1;}
+    .stats-band{grid-template-columns:1fr 1fr;padding:2rem;}
+    .stat-item{border-left:none;border-top:1px solid rgba(232,197,71,0.15);padding:1rem 0;}
+    .stat-item:first-child{border-top:none;}
+    .process-section{padding:3rem 2rem;}
+    .process-steps{grid-template-columns:1fr 1fr;gap:1.5rem;}
+    .process-step::after{display:none;}
+    .cta-banner{flex-direction:column;text-align:center;padding:3rem 2rem;}
+    footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem;}
+    .footer-links{justify-content:center;flex-wrap:wrap;}
+  }
+  @media(max-width:600px){
+    .process-steps{grid-template-columns:1fr;}
+    .stats-band{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">CIER<span>LOU</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html" class="active">Projects</a></li>
+    <li><a href="https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Cierlou&details=Let%27s+connect+via+Google+Meet&add=cierlout@gmail.com&location=Online+via+Google+Meet&pli=1" style="color:var(--accent);border:1px solid#1D69B1;padding:0.4rem 1rem;border-radius:4px;">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="section-label">✦ My Work</div>
+    <h1 class="page-title">FEATURED <span class="accent">PROJECTS</span></h1>
+  </div>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All Projects</button>
+  <button class="filter-btn" data-filter="wordpress">WordPress</button>
+  <button class="filter-btn" data-filter="va">Webflow</button>
+</div>
+
+<!-- PROJECTS -->
+<section class="projects-grid" id="projectsGrid">
+
+
+  <!-- Royal Window Tint -->
+  <div class="project-card featured" data-tags="wordpress">
+    <div style="background-image: url(elementor-placeholder-image.png); background-size: cover;" class="project-thumb thumb-wp">
+      <iframe src="https://royalwindowtint.com/" height="100%" width="100%" title="description"></iframe>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">WordPress</span>
+      </div>
+      <div class="project-name">Royal Window Tint</div>
+      <div class="project-client">Royal Window Tint. · Remote</div>
+      <p class="project-desc">Rely on our skilled and certified window tinting professionals to deliver the tinting results you envision in Rocklin and Sacramento, CA.</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://royalwindowtint.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+  <!-- Royal Window Tint -->
+
+  <!-- Nanas Green Tea -->
+  <div class="project-card" data-tags="va">
+    <div style="background-image: url(Nanas\ Green\ Tea.png); background-size: cover;" class="project-thumb thumb-seo"> 
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Webflow</span>
+      </div>
+      <div class="project-name">Nanas Green Tea</div>
+      <div class="project-client">Nanas Green Tea. · Remote</div>
+      <p class="project-desc">Nana's Green Tea is a modern Japanese cafe specializing in green teas and Japanese foods and desserts delivered in a modern fashion. We are a global matcha brand originating from Tokyo, Japan.</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://nanasgreentealasvegas.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+  <!-- Nanas Green Tea -->
+
+
+  <!-- Miracle Minds Therapy -->
+  <div class="project-card" data-tags="va">
+    <div style="background-image: url(Miracle\ Minds\ Theraphy.png); background-size: cover;" class="project-thumb thumb-wc">
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Webflow</span>
+      </div>
+      <div class="project-name">Miracle Minds Therapy</div>
+      <div class="project-client">Miracle Minds Therapy · Remote</div>
+      <p class="project-desc">Miracle Minds Therapy helps children, teens, adults, and elders get care for anxiety, depression, trauma, family stress, mood symptoms, and daily life struggles.</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://mmtnv.org/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+  <!-- Miracle Minds Therapy -->
+
+
+  <!-- KM Film 508 -->
+  <div class="project-card" data-tags="wordpress">
+    <div style="background-image: url(KMFilm.png); background-size: cover;" class="project-thumb thumb-shop">
+      <div class="thumb-label"><div class="project-year">2024</div></div>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Wordpress</span>
+      </div>
+      <div class="project-name">KM Film 508</div>
+      <div class="project-client">KM Film 508 · Remote</div>
+      <p class="project-desc">KMFilms is renowned in Massachusetts for its speed, efficiency, and integrity. We’ve built a reputation as a trusted name auto detailing Company in Massachusetts, thanks to a team that tackles each task with unparalleled skill and dedication.</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://kmfilm508.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+  <!-- KM Film 508 -->
+
+
+  <!-- iDeal Protection -->
+  <div class="project-card featured" data-tags="va">
+    <div style="background-image: url(IDeal\ Protection.png); background-size: cover;" class="project-thumb thumb-re">
+      <div class="thumb-label"><div class="project-year">Jan – Aug 2024</div></div>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Webflow</span>
+      </div>
+      <div class="project-name">iDeal Protection</div>
+      <div class="project-client">iDeal Protection · Remote</div>
+      <p class="project-desc">Experience top-notch protection with our Xpel Paint Protection Film, Windshield protection film, Ceramic Coating & Window Tint. Visit our XPEL certified shop!</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://ideal-protection.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+  <!-- iDeal Protection -->
+
+  <!-- Purple Flare Agency -->
+   <div class="project-card" data-tags="wordpress">
+    <div style="background-image: url(Purple\ Flare.png); background-size: cover;" class="project-thumb thumb-shop">
+      <div class="thumb-label"><div class="project-year">2024</div></div>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Wordpress</span>
+      </div>
+      <div class="project-name">Purple Flare Agency</div>
+      <div class="project-client">Purple Flare Agency · Remote</div>
+      <p class="project-desc">Purple Flare Wraps has been a leading Car Wraps Las Vegas shop for over a decade. We specialize in all aspects of paint protection, branding and vinyl wraps.</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://purpleflareagency.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+   <!-- Purple Flare Agency -->
+
+   <!-- Rev'd Auto Styling -->
+   <div class="project-card" data-tags="va">
+    <div style="background-image: url(RevD.png); background-size: cover;" class="project-thumb thumb-shop">
+      <div class="thumb-label"><div class="project-year">2024</div></div>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Webflow</span>
+      </div>
+      <div class="project-name">Rev'd Auto Styling</div>
+      <div class="project-client">Rev'd Auto Styling · Remote</div>
+      <p class="project-desc">Rev'd Auto Styling offers premier paint protection film, window tint, and ceramic coating in Boerne, TX. XPEL certified with warranties on all products. Call now to protect your vehicle!</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://revdautostyling.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+   <!-- Rev'd Auto Styling -->
+
+  <!-- C&M Home Designs -->
+   <div class="project-card" data-tags="wordpress">
+    <div style="background-image: url(c&mhomes.png); background-size: cover;" class="project-thumb thumb-shop">
+      <div class="thumb-label"><div class="project-year">2024</div></div>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Wordpress</span>
+      </div>
+      <div class="project-name">C&M Home Designs</div>
+      <div class="project-client">C&M Home Designs · Remote</div>
+      <p class="project-desc">Specializing in luxury custom home building and remodeling, we are dedicated to transforming your vision into a sophisticated and stylish reality.</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://candmhomedesigns.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+   <!-- C&M Home Designs -->
+
+   <!-- AV Tint -->
+   <div class="project-card" data-tags="va">
+    <div style="background-image: url(AVtint.png); background-size: cover;" class="project-thumb thumb-shop">
+      <div class="thumb-label"><div class="project-year">2024</div></div>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Webflow</span>
+      </div>
+      <div class="project-name">AV Tint</div>
+      <div class="project-client">AV Tint · Remote</div>
+      <p class="project-desc">Window Tint in Montclair, CA with warranty-backed film and certified installation, plus windshield tint and car audio upgrades. Call today or book at tintav.com/contact-us</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://tintav.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+   <!-- AV Tint -->
+
+   <!-- Arrow Masonry and Exteriors -->
+   <div class="project-card" data-tags="wordpress">
+    <div style="background-image: url(Arrow\ Masonry.png); background-size: cover;" class="project-thumb thumb-shop">
+      <div class="thumb-label"><div class="project-year">2024</div></div>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Wordpress</span>
+      </div>
+      <div class="project-name">Arrow Masonry and Exteriors</div>
+      <div class="project-client">Arrow Masonry and Exteriors · Remote</div>
+      <p class="project-desc">Arrow Masonry is an established masonry restoration company that services brick, concrete block and stone facades all over Chicago and neighboring areas.</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://www.tuckpointing.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+   <!-- Arrow Masonry and Exteriors -->
+
+   <!-- Bearded Bigfoot Detailing -->
+   <div class="project-card" data-tags="va">
+    <div style="background-image: url(Arrow\ Masonry.png); background-size: cover;" class="project-thumb thumb-shop">
+      <div class="thumb-label"><div class="project-year">2024</div></div>
+    </div>
+    <div class="project-body">
+      <div class="project-tags">
+        <span class="project-tag">Webflow</span>
+      </div>
+      <div class="project-name">Bearded Bigfoot Detailing</div>
+      <div class="project-client">Bearded Bigfoot Detailing · Remote</div>
+      <p class="project-desc">Bearded Bigfoot Detailing is a System X certified provider offering top-tier protection for your vehicle. Call (574) 551-4700 to book an appointment today!</p>
+      <div class="project-footer">
+        <a style="text-decoration: none;" href="https://beardedbigfootdetailing.com/" target="_blank"><span class="project-link">View Site →</span></a>
+      </div>
+    </div>
+  </div>
+   <!-- Bearded Bigfoot Detailing -->
+
+</section>
+
+<!-- STATS -->
+<div class="stats-band">
+  <div class="stat-item">
+    <div class="stat-num">10+</div>
+    <div class="stat-label">Projects Delivered</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">3+</div>
+    <div class="stat-label">Years Experience</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">100%</div>
+    <div class="stat-label">Remote Delivery</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">3</div>
+    <div class="stat-label">CMS Platforms</div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+<section class="process-section">
+  <div class="section-label">✦ How I Work</div>
+  <h2 class="process-title">MY <span class="accent">PROCESS</span></h2>
+  <div class="process-steps">
+    <div class="process-step">
+      <div class="step-num">01</div>
+      <div class="step-name">Discovery</div>
+      <div class="step-desc">Deep dive into your business goals, target audience, and technical requirements through thorough consultation.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02</div>
+      <div class="step-name">Design</div>
+      <div class="step-desc">Create wireframes and design mockups focused on user experience, branding consistency, and conversion optimization.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03</div>
+      <div class="step-name">Development</div>
+      <div class="step-desc">Build with clean, optimized code on your chosen CMS — WordPress, WooCommerce, or Shopify — with SEO built in.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-num">04</div>
+      <div class="step-name">Launch & Support</div>
+      <div class="step-desc">Thorough testing, launch, and ongoing maintenance to ensure your site keeps performing at its best.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-banner">
+  <div class="cta-text">
+    <div class="section-label">✦ Start a Project</div>
+    <h2>YOUR PROJECT<br>COULD BE <span style="color:var(--accent)">NEXT</span></h2>
+    <p>Ready to build something that drives real results? Let's talk about your vision and make it happen.</p>
+  </div>
+  <div style="display:flex;gap:1rem;flex-shrink:0;flex-wrap:wrap;">
+    <a href="https://mail.google.com/mail/u/0/?to=cierlout@gmail.com&fs=1&tf=cm" class="btn-primary">Get In Touch →</a>
+    <a href="about.html" class="btn-outline">About Me</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">CIER<span>LOU</span></div>
+  <p class="footer-copy">© <span id="year"></span> Cierlou Tudtud. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="projects.html">Projects</a>
+    <a href="https://mail.google.com/mail/u/0/?to=cierlout@gmail.com&fs=1&tf=cm">Contact</a>
+  </div>
+</footer>
+
+<script>
+// Filter
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('.project-card').forEach(card => {
+      if(f === 'all'){
+        card.classList.remove('hidden');
+      } else {
+        const tags = card.dataset.tags || '';
+        card.classList.toggle('hidden', !tags.includes(f));
+      }
+    });
+  });
+});
+
+// Animate cards in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting){
+      setTimeout(()=>{
+        e.target.style.opacity='1';
+        e.target.style.transform='translateY(0)';
+      }, i * 100);
+    }
+  });
+},{threshold:0.1});
+document.querySelectorAll('.project-card,.process-step').forEach(el=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(20px)';
+  el.style.transition='all 0.5s ease';
+  observer.observe(el);
+});
+</script>
+<script src="copyright-year.js"></script>
+<script src="lightbox-pop-up.js"></script>
+</body>
+</html>

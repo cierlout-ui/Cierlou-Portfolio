@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    padding:40px;
+}
+
+button{
+    padding:10px 20px;
+    margin:5px;
+    cursor:pointer;
+}
+
+/* Overlay */
+.overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.7);
+    justify-content:center;
+    align-items:center;
+}
+
+/* Popup */
+.popup{
+    background:#fff;
+    width:400px;
+    padding:25px;
+    border-radius:10px;
+    position:relative;
+}
+
+.close{
+    position:absolute;
+    top:10px;
+    right:15px;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.popup img{
+    width:100%;
+    border-radius:8px;
+    margin-bottom:15px;
+}
+</style>
+</head>
+<body>
+
+<h2>Sample Products</h2>
+
+<a href="#" onclick="showPopup(
+'Web Design',
+'https://picsum.photos/400/200?1',
+'We create modern and responsive websites tailored to your business.'
+)">
+Web Design
+</a>
+
+<button onclick="showPopup(
+'SEO Service',
+'https://picsum.photos/400/200?2',
+'Improve your Google rankings and attract more customers.'
+)">
+SEO Service
+</button>
+
+<button onclick="showPopup(
+'Digital Marketing',
+'https://picsum.photos/400/200?3',
+'Grow your brand through social media and online advertising.'
+)">
+Digital Marketing
+</button>
+
+<!-- Lightbox -->
+<div class="overlay" id="overlay">
+    <div class="popup">
+        <span class="close" onclick="closePopup()">&times;</span>
+
+        <img id="popupImage" src="">
+        <h2 id="popupTitle"></h2>
+        <p id="popupText"></p>
+    </div>
+</div>
+
+<script>
+const overlay = document.getElementById("overlay");
+
+function showPopup(title, image, text){
+    document.getElementById("popupTitle").innerHTML = title;
+    document.getElementById("popupImage").src = image;
+    document.getElementById("popupText").innerHTML = text;
+
+    overlay.style.display = "flex";
+}
+
+function closePopup(){
+    overlay.style.display = "none";
+}
+
+overlay.addEventListener("click", function(e){
+    if(e.target === overlay){
+        closePopup();
+    }
+});
+</script>
+
+</body>
+</html>

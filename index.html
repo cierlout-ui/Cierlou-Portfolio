@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cierlou Tudtud — Website Developer VA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="allaccent.css">
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--navy);
+    color: var(--light);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed; top:0; left:0; right:0; z-index:100;
+    display: flex; align-items:center; justify-content:space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(13,27,42,0.88);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid #1D69B1;
+    transition: all 0.3s;
+  }
+  
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--white); }
+  .nav-links { display:flex; gap:2.2rem; list-style:none; }
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px;
+    background: var(--accent); transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width:100%; }
+  .nav-links a.active { color: var(--accent); }
+  .nav-links a.active::after { width:100%; }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset:0; z-index:0;
+    background:
+      radial-gradient(ellipse 60% 60% at 70% 50%, rgba(26,51,82,0.7) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, #0d1b2a 0%, transparent 60%);
+  }
+  .hero-grid-lines {
+    position: absolute; inset:0; z-index:0;
+    background-image:
+      linear-gradient(#12243a 1px, transparent 1px),
+      linear-gradient(90deg, #12243a 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .hero-content { position:relative; z-index:1; }
+  .hero-tag {
+    display: inline-flex; align-items:center; gap:0.5rem;
+    background: #082138;
+    border: 1px solid #1D69B1;
+    border-radius: 100px;
+    padding: 0.35rem 1rem;
+    font-size: 0.75rem;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.8rem;
+    opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+  }
+  .hero-tag::before {
+    content:''; width:6px; height:6px; border-radius:50%;
+    background: var(--accent); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: fadeUp 0.7s 0.35s forwards;
+  }
+  .hero-title .outline {
+    -webkit-text-stroke: 2px var(--accent);
+    color: transparent;
+  }
+  .hero-title .filled { color: var(--white); }
+  .hero-title .accent { color: var(--accent); }
+  .hero-desc {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--muted);
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    opacity: 0; animation: fadeUp 0.7s 0.5s forwards;
+  }
+  .hero-desc strong { color: var(--light); font-weight: 500; }
+  .hero-cta {
+    display:flex; gap:1rem; flex-wrap:wrap;
+    opacity: 0; animation: fadeUp 0.7s 0.65s forwards;
+  }
+  .btn-primary {
+    display: inline-flex; align-items:center; gap:0.5rem;
+    background: var(--gradient);
+    color: var(--navy);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 4px 20px #1D69B1;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px #1D69B1; }
+  .btn-outline {
+    display: inline-flex; align-items:center; gap:0.5rem;
+    border: 1.5px solid #1D69B1;
+    color: var(--light);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  /* Hero stats */
+  .hero-stats {
+    display:flex; gap:2.5rem; margin-top: 3rem;
+    opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+  }
+  .stat-item { border-left: 2px solid #1D69B1; padding-left:1rem; }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; color:var(--accent); line-height:1; }
+  .stat-label { font-size:0.72rem; color:var(--muted); letter-spacing:0.1em; text-transform:uppercase; font-family:'Syne',sans-serif; font-weight:600; margin-top:0.2rem; }
+
+  /* Hero image side */
+  .hero-visual {
+    position: relative; z-index:1;
+    display: flex; align-items:center; justify-content:center;
+    opacity: 0; animation: fadeIn 1s 0.4s forwards;
+  }
+  .hero-img-frame {
+    position: relative;
+    width: 360px; height: 440px;
+  }
+  .hero-img-frame::before {
+    content:'';
+    position:absolute; top:-16px; right:-16px;
+    width:100%; height:100%;
+    border-radius: 8px;
+    opacity:0.5;
+  }
+  .hero-img-frame::after {
+    content:'';
+    position:absolute; bottom:-20px; left:-20px;
+    width:50%; height:50%;
+    background: transparent;
+    border-radius:8px;
+  }
+  .hero-img {
+    width:100%; height:100%;
+    object-fit:cover;
+    border-radius:8px;
+    filter: grayscale(20%) contrast(1.05);
+    background: var(--navy3);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hero-img-placeholder {
+    width:100%; height:100%;
+    border-radius:8px;
+    background: linear-gradient(145deg, var(--navy2), var(--navy3));
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:1rem;
+    border: 2px solid var(--accent);
+    background-image: url('pfpnewupdate.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: right;
+  }
+  .hero-img-placeholder .initials {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:5rem;
+    color:var(--accent);
+    line-height:1;
+    opacity:0.7;
+  }
+  .hero-badge {
+    position:absolute; bottom: 24px; left:-30px;
+    background: var(--navy2);
+    border: 1px solid #1D69B1;
+    border-radius:8px;
+    padding:0.8rem 1.2rem;
+    display:flex; align-items:center; gap:0.6rem;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    white-space:nowrap;
+  }
+  .badge-dot { width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite; }
+  .badge-text { font-size:0.78rem;font-family:'Syne',sans-serif;font-weight:600; color:var(--light); }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+  /* ---- SERVICES STRIP ---- */
+  .services-strip {
+    padding: 5rem 4rem;
+    background: var(--navy2);
+    border-top: 1px solid rgba(232,197,71,0.08);
+    border-bottom: 1px solid rgba(232,197,71,0.08);
+  }
+  .section-label {
+    font-family:'Syne',sans-serif; font-weight:700;
+    font-size:0.72rem; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:1rem;
+  }
+  .section-title {
+    font-family:'Bebas Neue',sans-serif;
+    font-size:clamp(2rem,4vw,3.2rem);
+    line-height:1;
+    margin-bottom:0.5rem;
+  }
+  .section-title .accent { color:var(--accent); }
+  .services-intro {
+    display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:end;
+    margin-bottom:3.5rem;
+  }
+  .services-sub { color:var(--muted); line-height:1.7; font-weight:300; max-width:420px; }
+  .services-grid {
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem;
+  }
+  .service-card {
+    background: var(--navy);
+    border: 1px solid #1D69B1;
+    border-radius: 8px;
+    padding: 2rem 1.8rem;
+    transition: all 0.3s;
+    position:relative; overflow:hidden;
+  }
+  .service-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:2px;
+    background: var(--gradient); transform:scaleX(0); transform-origin:left;
+    transition: transform 0.3s;
+  }
+  .service-card:hover { border-color: #082138; transform:translateY(-4px); }
+  .service-card:hover::before { transform:scaleX(1); }
+  .service-icon {
+    width:44px;height:44px; border-radius:8px;
+    background:rgba(232,197,71,0.1);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:1.2rem;
+    font-size:1.3rem;
+  }
+  .service-name {
+    font-family:'Syne',sans-serif; font-weight:700;
+    font-size:1rem; margin-bottom:0.6rem;
+  }
+  .service-desc { font-size:0.85rem; color:var(--muted); line-height:1.65; }
+
+  /* ---- SKILLS BAR ---- */
+  .skills-section {
+    padding: 5rem 4rem;
+    display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center;
+  }
+  .skill-bar-wrap { margin-bottom:1.5rem; }
+  .skill-bar-header { display:flex;justify-content:space-between;margin-bottom:0.5rem; }
+  .skill-bar-label { font-family:'Syne',sans-serif;font-weight:600;font-size:0.88rem; }
+  .skill-bar-pct { font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--accent); }
+  .skill-track { height:4px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden; }
+  .skill-fill {
+    height:100%; border-radius:4px; background:var(--gradient);
+    width:0; transition: width 1.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  /* ---- TESTIMONIAL ---- */
+  .testimonial-section {
+    padding: 5rem 4rem;
+    background: var(--navy2);
+    border-top:1px solid rgba(232,197,71,0.08);
+    text-align:center;
+  }
+  .testimonial-grid { display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem; }
+  .testimonial-card {
+    background:var(--navy);
+    border:1px solid #1D69B1;
+    border-radius:8px;
+    padding:2.5rem;
+    text-align:left;
+    position:relative;
+  }
+  .testimonial-card::before {
+    content:'"'; font-family:'Bebas Neue',sans-serif;
+    font-size:6rem; line-height:1; color:var(--accent);
+    opacity:0.15; position:absolute; top:0.5rem; left:1.5rem;
+  }
+  .testimonial-text {
+    font-style:italic; color:var(--muted); line-height:1.8; margin-bottom:1.5rem; font-size:0.95rem;
+    position:relative; z-index:1;
+  }
+  .testimonial-author { font-family:'Syne',sans-serif;font-weight:700;font-size:0.88rem; }
+  .testimonial-role { font-size:0.78rem;color:var(--accent);margin-top:0.2rem; }
+
+  /* ---- CTA BANNER ---- */
+  .cta-banner {
+    padding: 5rem 4rem;
+    display:flex; align-items:center; justify-content:space-between; gap:3rem;
+    background: linear-gradient(135deg, #0B2A46 0%, #0B2A46 100%);
+    border-top:1px solid #082138;
+    border-bottom:1px solid #082138;
+  }
+  .cta-text .section-label { margin-bottom:0.5rem; }
+  .cta-text h2 { font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,4vw,3rem);line-height:1; }
+  .cta-text p { color:var(--muted);margin-top:0.8rem;max-width:500px;line-height:1.7; }
+
+  /* ---- FOOTER ---- */
+  footer {
+    padding: 3rem 4rem;
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--navy);
+    border-top:1px solid rgba(232,197,71,0.08);
+  }
+  .footer-logo { font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:var(--accent); letter-spacing:0.1em; }
+  .footer-logo span{color:var(--white);}
+  .footer-copy { font-size:0.78rem;color:var(--muted); }
+  .footer-links { display:flex;gap:1.5rem; }
+  .footer-links a { font-size:0.78rem;color:var(--muted);text-decoration:none;transition:color 0.2s; font-family:'Syne',sans-serif;font-weight:600;letter-spacing:0.1em;text-transform:uppercase; }
+  .footer-links a:hover { color:var(--accent); }
+
+  /* Responsive */
+  @media(max-width:900px){
+    nav{padding:1rem 2rem;}
+    .hero{grid-template-columns:1fr;padding:7rem 2rem 3rem;text-align:center;}
+    .hero-visual{display:none;}
+    .hero-cta{justify-content:center;}
+    .hero-stats{justify-content:center;}
+    .services-intro{grid-template-columns:1fr;}
+    .services-grid{grid-template-columns:1fr;}
+    .skills-section{grid-template-columns:1fr;padding:3rem 2rem;}
+    .services-strip,.testimonial-section{padding:3rem 2rem;}
+    .testimonial-grid{grid-template-columns:1fr;}
+    .cta-banner{flex-direction:column;text-align:center;padding:3rem 2rem;}
+    footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem;}
+    .footer-links{justify-content:center;flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">CIER<span>LOU</span></a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="projects.html">Projects</a></li>
+    <li><a href="https://calendar.google.com/calendar/u/0/r/eventedit?text=Meeting+with+Cierlou&details=Let%27s+connect+via+Google+Meet&add=cierlout@gmail.com&location=Online+via+Google+Meet&pli=1" style="color:var(--accent);border:1px solid #1D69B1;padding:0.4rem 1rem;border-radius:4px;">Hire Me</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-tag">✦ Available for Projects</div>
+    <h1 class="hero-title">
+      <span class="filled">WEBSITE</span><br>
+      <span class="outline">DEVELOPER</span><br>
+      <span class="accent">&amp; DESIGNER</span>
+    </h1>
+    <p class="hero-desc">
+      Hi, I'm <strong>Cierlou Tudtud</strong> — a creative Website Developer VA with <strong>3+ years</strong> of experience building responsive, SEO-optimized websites across diverse CMS platforms. Based in the Philippines, working remotely worldwide.
+    </p>
+    <div class="hero-cta">
+      <a href="projects.html" class="btn-primary">View My Work →</a>
+      <a href="about.html" class="btn-outline">About Me</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Years Exp.</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">10+</div>
+        <div class="stat-label">Projects</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Remote</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-img-frame">
+      <div class="hero-img-placeholder">
+
+      </div>
+    </div>
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      <span class="badge-text">Open to Work</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-strip">
+  <div class="services-intro">
+    <div>
+      <div class="section-label">✦ What I Do</div>
+      <h2 class="section-title">SERVICES &amp; <span class="accent">EXPERTISE</span></h2>
+    </div>
+    <p class="services-sub">From building pixel-perfect websites to managing e-commerce platforms, I deliver end-to-end web solutions that convert visitors into customers.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🖥️</div>
+      <div class="service-name">Website Design &amp; Development</div>
+      <div class="service-desc">Building responsive, high-performance websites on WordPress, WooCommerce, and Shopify that are both beautiful and functional.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔍</div>
+      <div class="service-name">SEO Optimization</div>
+      <div class="service-desc">Strategic on-page and technical SEO implementation to boost search rankings, drive organic traffic, and increase conversions.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛒</div>
+      <div class="service-name">E-Commerce Solutions</div>
+      <div class="service-desc">Custom WooCommerce stores, Shopify product management, inventory systems, and conversion rate optimization.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚙️</div>
+      <div class="service-name">CMS Management</div>
+      <div class="service-desc">Plugin integration, theme development, site maintenance, performance tuning, and ongoing technical support.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📊</div>
+      <div class="service-name">Virtual Assistance</div>
+      <div class="service-desc">Admin support, email marketing, data entry, web analytics, bookkeeping, and SMM to keep your business running smoothly.</div>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">✍️</div>
+      <div class="service-name">Content &amp; SEO Writing</div>
+      <div class="service-desc">Blog management, SEO-optimized content creation, and graphic design to elevate your brand's online presence.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills-section" id="skills">
+  <div>
+    <div class="section-label">✦ My Proficiency</div>
+    <h2 class="section-title">CORE <span class="accent">SKILLS</span></h2>
+    <p style="color:var(--muted);margin-top:1rem;line-height:1.7;font-weight:300;">Years of hands-on experience across diverse projects have sharpened these key competencies.</p>
+    <div style="margin-top:2.5rem;">
+      <a href="about.html" class="btn-outline">Full Profile →</a>
+    </div>
+  </div>
+  <div class="skills-bars">
+    <div class="skill-bar-wrap">
+      <div class="skill-bar-header"><span class="skill-bar-label">Website Development</span><span class="skill-bar-pct">97%</span></div>
+      <div class="skill-track"><div class="skill-fill" data-width="97"></div></div>
+    </div>
+    <div class="skill-bar-wrap">
+      <div class="skill-bar-header"><span class="skill-bar-label">Website Design</span><span class="skill-bar-pct">92%</span></div>
+      <div class="skill-track"><div class="skill-fill" data-width="92"></div></div>
+    </div>
+    <div class="skill-bar-wrap">
+      <div class="skill-bar-header"><span class="skill-bar-label">Content Management</span><span class="skill-bar-pct">99%</span></div>
+      <div class="skill-track"><div class="skill-fill" data-width="99"></div></div>
+    </div>
+    <div class="skill-bar-wrap">
+      <div class="skill-bar-header"><span class="skill-bar-label">SEO Optimization</span><span class="skill-bar-pct">90%</span></div>
+      <div class="skill-track"><div class="skill-fill" data-width="90"></div></div>
+    </div>
+    <div class="skill-bar-wrap">
+      <div class="skill-bar-header"><span class="skill-bar-label">Project Communication</span><span class="skill-bar-pct">99%</span></div>
+      <div class="skill-track"><div class="skill-fill" data-width="99"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonial-section">
+  <div class="section-label">✦ References</div>
+  <h2 class="section-title">WHAT <span class="accent">CLIENTS SAY</span></h2>
+  <div class="testimonial-grid">
+    <div class="testimonial-card">
+      <p class="testimonial-text">Cierlou built high-performing WordPress websites focused on maximizing conversions and user engagement. Their Shopify SEO implementation drove significant e-commerce traffic and boosted our sales. Transparent, communicative, and always delivers on time.</p>
+      <div class="testimonial-author">Angel Huffman</div>
+      <div class="testimonial-role">CEO, Hoek Lab App · angel@hoek.com</div>
+    </div>
+    <div class="testimonial-card">
+      <p class="testimonial-text">An exceptional developer who spearheaded our real estate website — property listings, search filters, interactive maps. Cierlou created user-friendly interfaces and robust backend systems that significantly enhanced our online presence and lead generation.</p>
+      <div class="testimonial-author">Christina Lowry James</div>
+      <div class="testimonial-role">CEO, Real Estate Agency · christina@bwh.com</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-banner">
+  <div class="cta-text">
+    <div class="section-label">✦ Let's Work Together</div>
+    <h2>READY TO BUILD<br>SOMETHING <span style="color:var(--accent)">GREAT?</span></h2>
+    <p>Whether you need a new website, an e-commerce overhaul, or ongoing VA support — I'm here and available for your next project.</p>
+  </div>
+  <div style="display:flex;gap:1rem;flex-shrink:0;flex-wrap:wrap;">
+    <a href="https://mail.google.com/mail/u/0/?to=cierlout@gmail.com&fs=1&tf=cm" class="btn-primary">Get In Touch →</a>
+    <a href="projects.html" class="btn-outline">See My Work</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">CIER<span>LOU</span></div>
+  <p class="footer-copy">© <span id="year"></span> Cierlou Tudtud. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="projects.html">Projects</a>
+    <a href="https://mail.google.com/mail/u/0/?to=cierlout@gmail.com&fs=1&tf=cm">Contact</a>
+  </div>
+</footer>
+
+<script>
+// Animate skill bars on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.skill-fill').forEach(bar => {
+        const w = bar.getAttribute('data-width');
+        setTimeout(()=>{ bar.style.width = w + '%'; }, 200);
+      });
+    }
+  });
+}, {threshold:0.3});
+const skillsSection = document.querySelector('.skills-bars');
+if(skillsSection) observer.observe(skillsSection.closest('section'));
+
+// Scroll-fade for service cards
+const cardObserver = new IntersectionObserver((entries) => {
+  entries.forEach((e,i) => {
+    if(e.isIntersecting){
+      setTimeout(()=>{
+        e.target.style.opacity='1';
+        e.target.style.transform='translateY(0)';
+      }, i * 80);
+    }
+  });
+}, {threshold:0.1});
+document.querySelectorAll('.service-card, .testimonial-card').forEach(card => {
+  card.style.opacity='0';
+  card.style.transform='translateY(20px)';
+  card.style.transition='all 0.5s ease';
+  cardObserver.observe(card);
+});
+
+</script>
+<script src="copyright-year.js"></script>
+</body>
+</html>
